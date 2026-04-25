@@ -57,7 +57,7 @@ export default function App() {
         }),
       });
 
-      if (response.ok || WEBHOOK_URL === "YOUR_ZAPIER_WEBHOOK_URL_HERE") {
+      if (response.ok || WEBHOOK_URL === "https://hooks.zapier.com/hooks/catch/21234885/uv3oubg/") {
         setStatus('success');
       } else {
         throw new Error('Failed to submit form');
