@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Heart, MapPin, Calendar, Check, AlertCircle, Loader2 } from 'lucide-react';
 
 // --- CONFIGURATION ---
-// Replace this URL with your generated Zapier Webhook URL, Formspree endpoint, or Make.com webhook.
-const WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/21234885/uv3oubg/";
+// You will paste your Google Apps Script Web App URL here in Step 3!
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-a4uSn24iyVuPx5EDxkTAMyqHc62py81Pn_z8J0VBXxByDDVI29VGeE0gQbVkhDseBg/exec";
 
-// Reusable Polaroid Component to keep our code clean
+// Reusable Polaroid Component
 const Polaroid = ({ src, alt, caption, date, rotation, fallback }) => (
   <div className={`bg-[#fcfcfb] p-3 pb-10 shadow-[0_15px_35px_rgb(0,0,0,0.1)] border border-stone-200 pointer-events-none ${rotation}`}>
     <div className="w-full aspect-[4/5] bg-stone-100 overflow-hidden">
@@ -45,23 +45,23 @@ export default function App() {
     setStatus('submitting');
 
     try {
-      const response = await fetch(WEBHOOK_URL, {
+      // Send data directly to Google Sheets using 'no-cors' mode
+      // Note: 'no-cors' means we can't read the response, but it successfully delivers the data to Google
+      await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
+        mode: 'no-cors', 
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
         },
         body: JSON.stringify({
           ...formData,
-          submittedAt: new Date().toISOString(),
+          submittedAt: new Date().toLocaleString('en-GB'), // Formats date nicely
         }),
       });
 
-      if (response.ok || WEBHOOK_URL === "https://hooks.zapier.com/hooks/catch/21234885/uv3oubg/") {
-        setStatus('success');
-      } else {
-        throw new Error('Failed to submit form');
-      }
+      // Because of 'no-cors', if the fetch doesn't throw a network error, we assume success
+      setStatus('success');
+      
     } catch (error) {
       console.error('Submission error:', error);
       setStatus('error');
@@ -128,9 +128,9 @@ export default function App() {
           <div className="w-40 sm:w-48 md:w-56 mt-2 relative z-10">
             <Polaroid 
               src="/couple.jpeg" 
-              alt="Double Denim" 
-              caption="Double Denim Date" 
-              date="05.09.2022" 
+              alt="Areej & Jack" 
+              caption="Areej & Jack" 
+              date="05.09.2026" 
               rotation="rotate-[-4deg]"
               fallback="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=800&auto=format&fit=crop"
             />
@@ -139,8 +139,8 @@ export default function App() {
             <Polaroid 
               src="/polaroid1.jpeg" 
               alt="Engagement" 
-              caption="She said Yes!" 
-              date="25/12/2025" 
+              caption="She said yes!" 
+              date="Summer 2025" 
               rotation="rotate-[3deg]"
               fallback="https://images.unsplash.com/photo-1606800052052-a08af7148866?q=80&w=800&auto=format&fit=crop"
             />
